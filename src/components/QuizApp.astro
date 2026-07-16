@@ -6,6 +6,7 @@ interface Props {
 }
 
 const { test } = Astro.props;
+const serializedTest = JSON.stringify(test).replaceAll("<", "\\u003c");
 ---
 
 <section class="quiz-shell" id="quiz-app" data-test-id={test.id} aria-labelledby="exam-title">
@@ -98,6 +99,7 @@ const { test } = Astro.props;
     </div>
     <p class="share-status" id="share-status" aria-live="polite"></p>
   </div>
+  <script is:inline type="application/json" data-quiz-data set:html={serializedTest}></script>
 </section>
 
 <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>

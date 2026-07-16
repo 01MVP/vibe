@@ -1,10 +1,11 @@
-import { tests, type QuizQuestion, type TestDefinition, type TestLevel } from "../data/tests";
+import type { QuizQuestion, TestDefinition, TestLevel } from "../data/tests";
 
 const root = document.querySelector<HTMLElement>("#quiz-app");
 
 if (root) {
-  const test = tests.find((item) => item.id === root.dataset.testId);
-  if (!test) throw new Error(`Unknown test: ${root.dataset.testId}`);
+  const data = root.querySelector<HTMLScriptElement>("[data-quiz-data]")?.textContent;
+  if (!data) throw new Error(`Missing quiz data: ${root.dataset.testId}`);
+  const test = JSON.parse(data) as TestDefinition;
   bootQuiz(root, test);
 }
 
