@@ -1,6 +1,6 @@
 # Vibe Coding 月考
 
-每月一期的 Vibe Coding 趣味考试：最新模型事实、Agent 实战和生产环境常识，答完获得毒舌诊断与可分享战报。
+每月一期的 Vibe Coding 趣味考试。9 道题测出 8 种 Vibe 类型，答完获得分数、毒舌诊断与可保存的结果图。
 
 ## 本地开发
 
@@ -28,8 +28,8 @@ npx wrangler@latest pages deploy dist --project-name vibe --branch main
 
 ## 内容结构
 
-- `src/data/questions.ts`：三套题库、答案、解析与来源快照
-- `src/scripts/quiz.ts`：答题、评分、动画、音效和分享逻辑
+- `src/data/questions.ts`：月考试题、答案、解析与来源快照
+- `src/scripts/quiz.ts`：答题、评分、8 种类型判定、动画、音效和结果图逻辑
 - `src/styles/global.css`：页面视觉与响应式样式
 - `public/assets/`：页面使用的生成式插画
 

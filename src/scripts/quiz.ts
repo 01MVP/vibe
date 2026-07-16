@@ -36,10 +36,20 @@ const feedbackVerdict = $("#feedback-verdict");
 const feedbackExplanation = $("#feedback-explanation");
 const feedbackSource = $("#feedback-source") as HTMLAnchorElement;
 const nextQuestion = $("#next-question") as HTMLButtonElement;
+const resultCard = $("#result-card");
 const resultScore = $("#result-score");
 const resultModeNote = $("#result-mode-note");
+const resultCode = $("#result-code");
+const resultIcon = $("#result-icon");
 const resultTitle = $("#result-title");
+const resultQuote = $("#result-quote");
 const resultRoast = $("#result-roast");
+const contextBar = $("#context-bar");
+const evidenceBar = $("#evidence-bar");
+const safetyBar = $("#safety-bar");
+const contextValue = $("#context-value");
+const evidenceValue = $("#evidence-value");
+const safetyValue = $("#safety-value");
 const shareStatus = $("#share-status");
 const celebrationLayer = $("#celebration-layer");
 const celebrationCopy = $("#celebration-copy");
@@ -60,59 +70,119 @@ let scoredAnswered = 0;
 let correct = 0;
 let totalAnswered = 0;
 let combo = 0;
+let stageCorrect = [0, 0, 0];
 let isAnswered = false;
 let soundOn = true;
 let audioContext: AudioContext | undefined;
 let celebrationTimer: number | undefined;
 
+interface VibeType {
+  code: string;
+  name: string;
+  icon: string;
+  quote: string;
+  roast: string;
+  color: string;
+  ink: string;
+}
+
 const campaignStages = [
   {
     index: "LV.01",
     title: "Prompt 新手村",
-    copy: "你已经会把愿望改写成范围、约束和验收标准。村口的万能 Prompt 卷轴失去了法力。",
+    copy: "会问，不许愿。",
     next: "Agent 驯兽场",
   },
   {
     index: "LV.02",
     title: "Agent 驯兽场",
-    copy: "你开始看 diff、要证据、控制并行边界。Agent 仍然会乱跑，但已经戴上项圈。",
+    copy: "会验，不迷信绿色对勾。",
     next: "生产环境地狱",
   },
   {
     index: "LV.03",
     title: "生产环境地狱",
-    copy: "你知道密钥会泄露、迁移会删库、周五会骗人。现在去见最终 Boss。",
+    copy: "会上线，也会回来。",
     next: "周五 23:58",
   },
 ];
 
-const resultLevels = [
-  {
-    min: 90,
-    title: "生产环境幸存者",
-    roast: "你知道什么时候该相信 Agent，也知道什么时候该拔掉它的网线。现在的问题是：你的同事知道吗？",
+const vibeTypes: Record<string, VibeType> = {
+  WISH: {
+    code: "WISH",
+    name: "许愿池术士",
+    icon: "🪄",
+    quote: "做得高级一点，剩下交给命运。",
+    roast: "你的 Prompt 很有梦想，验收标准还在路上。",
+    color: "#f6d8cf",
+    ink: "#6d2918",
   },
-  {
-    min: 75,
-    title: "上下文建筑师",
-    roast: "你喂给 AI 的不是愿望，是边界、证据和验收标准。它偶尔还是会犯傻，但至少不是自由发挥。",
+  CTRL: {
+    code: "CTRL",
+    name: "上下文包工头",
+    icon: "🧱",
+    quote: "上下文写了八页，测试一行没跑。",
+    roast: "你很会交代任务，交付后的世界暂时不归你管。",
+    color: "#dfe5f5",
+    ink: "#24345d",
   },
-  {
-    min: 60,
-    title: "Agent 驯兽员",
-    roast: "大部分时候你在骑马，少数时候马在登录你的生产服务器。继续练。",
+  DIFF: {
+    code: "DIFF",
+    name: "改动显微镜",
+    icon: "🔬",
+    quote: "需求没看懂，但 diff 看得很懂。",
+    roast: "任何一行偷偷变化，都逃不过你的审判。",
+    color: "#eee2c8",
+    ink: "#57421d",
   },
-  {
-    min: 40,
-    title: "复制粘贴工程师",
-    roast: "你已经掌握了最重要的快捷键，距离掌握上下文只差一次认真看 diff。",
+  BACK: {
+    code: "BACK",
+    name: "回滚预言家",
+    icon: "↩️",
+    quote: "功能还没上线，回滚方案已经写完。",
+    roast: "你不一定知道要去哪，但永远知道怎么回来。",
+    color: "#dcebd7",
+    ink: "#284622",
   },
-  {
-    min: 0,
-    title: "Prompt 许愿池常驻嘉宾",
-    roast: "你的核心工作流是输入‘做得高级一点’，然后对结果感到私人背叛。好消息：成长空间巨大。",
+  TEST: {
+    code: "TEST",
+    name: "绿勾收藏家",
+    icon: "✅",
+    quote: "绿色对勾，是唯一的睡前故事。",
+    roast: "你会问、会验；只差学会别在周五直接上线。",
+    color: "#d9eed1",
+    ink: "#22491d",
   },
-];
+  SAFE: {
+    code: "SAFE",
+    name: "安全带焊死侠",
+    icon: "🪖",
+    quote: "先备份。再备份刚才的备份。",
+    roast: "你很会交代，也很怕出事，中间的验证偶尔靠缘分。",
+    color: "#f3e1b8",
+    ink: "#5b4316",
+  },
+  FIRE: {
+    code: "FIRE",
+    name: "事故现场监督员",
+    icon: "🧯",
+    quote: "不是在救火，就是在找谁点的火。",
+    roast: "你会验证、会止血，但需求经常从火场里第一次见面。",
+    color: "#ffd6c8",
+    ink: "#6b2d1d",
+  },
+  SHIP: {
+    code: "SHIP",
+    name: "生产环境幸存者",
+    icon: "🚢",
+    quote: "能上线，也能活着回来。",
+    roast: "你会问、会验、会回滚。AI 暂时还骗不到你。",
+    color: "#d5eadf",
+    ink: "#1f4937",
+  },
+};
+
+let currentType = vibeTypes.WISH;
 
 function setHidden(element: HTMLElement, hidden: boolean) {
   element.hidden = hidden;
@@ -138,9 +208,24 @@ function updateCombo() {
   if (combo >= 2) requestAnimationFrame(() => comboBox.classList.add("is-hot"));
 }
 
-function modeLabel(mode: QuizMode) {
-  if (mode === "campaign") return "Vibe Coding 生存模式";
-  return tracks.find((item) => item.id === mode)?.title ?? mode;
+function resolveVibeType() {
+  const key = stageCorrect.map((value) => (value >= 2 ? "1" : "0")).join("");
+  const codeByProfile: Record<string, keyof typeof vibeTypes> = {
+    "000": "WISH",
+    "100": "CTRL",
+    "010": "DIFF",
+    "001": "BACK",
+    "110": "TEST",
+    "101": "SAFE",
+    "011": "FIRE",
+    "111": "SHIP",
+  };
+  return vibeTypes[codeByProfile[key] ?? "WISH"];
+}
+
+function updateDimension(element: HTMLElement, valueElement: HTMLElement, value: number) {
+  element.style.width = `${(value / 3) * 100}%`;
+  valueElement.textContent = `${value}/3`;
 }
 
 function initAudio() {
@@ -212,6 +297,7 @@ function startTrack(track: QuizMode) {
   correct = 0;
   totalAnswered = 0;
   combo = 0;
+  stageCorrect = [0, 0, 0];
   isAnswered = false;
   const trackInfo = tracks.find((item) => item.id === track);
   activeTrackName.textContent = track === "campaign" ? "MAIN QUEST / 生存模式" : trackInfo ? `${trackInfo.index} / ${trackInfo.title}` : track;
@@ -278,11 +364,11 @@ function answerQuestion(question: QuizQuestion, selectedIndex: number) {
     if (selected.correct) {
       correct += 1;
       combo += 1;
+      if (activeTrack === "campaign") stageCorrect[Math.min(Math.floor(questionIndex / 3), 2)] += 1;
       verdict = "答对了，离被 AI 取代又远了 3 分钟";
       state = "correct";
       buttons[selectedIndex]?.classList.add("is-correct");
       playCorrectSound();
-      showCelebration("AI 董事会批准了你的答案");
     } else {
       combo = 0;
       verdict = "答错了，但你至少没有直接 push main";
@@ -327,18 +413,30 @@ function showLevelCleared() {
 
 function finishTrack() {
   const score = percentage();
-  const level = resultLevels.find((item) => score >= item.min) ?? resultLevels.at(-1)!;
+  currentType = activeTrack === "campaign" ? resolveVibeType() : score >= 80 ? vibeTypes.SHIP : score >= 60 ? vibeTypes.TEST : vibeTypes.WISH;
+  resultCard.dataset.type = currentType.code;
+  resultCard.style.setProperty("--type-color", currentType.color);
+  resultCard.style.setProperty("--type-ink", currentType.ink);
   resultScore.textContent = String(score);
-  resultTitle.textContent = level.title;
-  resultRoast.textContent = level.roast;
-  resultModeNote.textContent = activeTrack === "campaign" ? "三关主线已通关 · FINAL BOSS DEFEATED" : `${modeLabel(activeTrack)} · PRACTICE COMPLETE`;
+  resultCode.textContent = currentType.code;
+  resultIcon.textContent = currentType.icon;
+  resultTitle.textContent = currentType.name;
+  resultQuote.textContent = currentType.quote;
+  resultRoast.textContent = currentType.roast;
+  resultModeNote.textContent = "YOUR VIBE TYPE";
+  updateDimension(contextBar, contextValue, stageCorrect[0]);
+  updateDimension(evidenceBar, evidenceValue, stageCorrect[1]);
+  updateDimension(safetyBar, safetyValue, stageCorrect[2]);
   setHidden(questionView, true);
   setHidden(resultView, false);
-  scoreLabel.textContent = level.title;
-  reactionText.textContent = `最终鉴定：${level.title}。这不是职业资格证，但很适合发群里。`;
-  showCelebration(`${score} 分！AI 董事会正在假装惊讶`);
+  scoreLabel.textContent = `${currentType.code} / ${currentType.name}`;
+  reactionText.textContent = currentType.quote;
+  if (score === 100) showCelebration("满分。AI 董事会被迫起立。");
+  else burstConfetti();
   const url = new URL(window.location.href);
-  url.searchParams.set("challenge", `${activeTrack}:${score}`);
+  url.searchParams.delete("challenge");
+  url.searchParams.set("result", currentType.code);
+  url.searchParams.set("score", String(score));
   window.history.replaceState({}, "", url);
 }
 
@@ -351,33 +449,128 @@ function showPicker() {
   answeredCount.textContent = "0";
   scoreRing.style.strokeDashoffset = String(circumference);
   combo = 0;
+  stageCorrect = [0, 0, 0];
   updateCombo();
   activeLevelName.hidden = true;
   scoreLabel.textContent = "等待开考";
   reactionText.textContent = "请先选择一张试卷。我们承诺不会把成绩发给你老板。";
   const url = new URL(window.location.href);
   url.searchParams.delete("challenge");
+  url.searchParams.delete("result");
+  url.searchParams.delete("score");
   window.history.replaceState({}, "", url);
+}
+
+function drawWrappedText(context: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, lineHeight: number) {
+  let line = "";
+  let currentY = y;
+  for (const character of text) {
+    const nextLine = line + character;
+    if (context.measureText(nextLine).width > maxWidth && line) {
+      context.fillText(line, x, currentY);
+      line = character;
+      currentY += lineHeight;
+    } else {
+      line = nextLine;
+    }
+  }
+  if (line) context.fillText(line, x, currentY);
+  return currentY;
+}
+
+async function createResultImage() {
+  await document.fonts.ready;
+  const score = percentage();
+  const canvas = document.createElement("canvas");
+  canvas.width = 1080;
+  canvas.height = 1440;
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("Canvas is unavailable");
+
+  context.fillStyle = currentType.color;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = "#ffffff";
+  context.fillRect(64, 64, 952, 1312);
+  context.strokeStyle = currentType.ink;
+  context.lineWidth = 4;
+  context.strokeRect(64, 64, 952, 1312);
+
+  context.fillStyle = currentType.ink;
+  context.font = '700 28px "JetBrains Mono", monospace';
+  context.fillText("01MVP / VIBE TYPE", 112, 130);
+  context.textAlign = "right";
+  context.fillText(`${score}/100`, 968, 130);
+  context.textAlign = "left";
+
+  context.font = '900 190px "Inter", sans-serif';
+  context.fillText(currentType.code, 104, 360);
+  context.font = '140px "Apple Color Emoji", sans-serif';
+  context.textAlign = "right";
+  context.fillText(currentType.icon, 954, 350);
+  context.textAlign = "left";
+
+  context.font = '800 72px "Noto Sans SC", sans-serif';
+  context.fillText(currentType.name, 112, 470);
+  context.fillStyle = "#20201f";
+  context.font = '800 46px "Noto Sans SC", sans-serif';
+  const quoteBottom = drawWrappedText(context, currentType.quote, 112, 570, 820, 68);
+
+  const labels = ["会问", "会验", "会上线"];
+  const values = stageCorrect;
+  const startY = Math.max(760, quoteBottom + 120);
+  labels.forEach((label, index) => {
+    const y = startY + index * 112;
+    context.fillStyle = "#20201f";
+    context.font = '700 28px "Noto Sans SC", sans-serif';
+    context.fillText(label, 112, y);
+    context.fillStyle = "#e9e6df";
+    context.fillRect(250, y - 27, 580, 30);
+    context.fillStyle = currentType.ink;
+    context.fillRect(250, y - 27, (580 * values[index]) / 3, 30);
+    context.font = '700 24px "JetBrains Mono", monospace';
+    context.fillText(`${values[index]}/3`, 860, y);
+  });
+
+  context.fillStyle = "#706d66";
+  context.font = '500 30px "Noto Sans SC", sans-serif';
+  drawWrappedText(context, currentType.roast, 112, startY + 390, 820, 46);
+  context.fillStyle = currentType.ink;
+  context.font = '700 24px "JetBrains Mono", monospace';
+  context.fillText("vibe.01mvp.com", 112, 1318);
+
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("Image export failed"))), "image/png");
+  });
 }
 
 async function shareResult() {
   const score = percentage();
-  const title = resultTitle.textContent ?? "Vibe Coder";
-  const track = modeLabel(activeTrack);
   const url = new URL(window.location.href);
-  url.searchParams.set("challenge", `${activeTrack}:${score}`);
-  const text = `我在 Vibe Coding 月考的「${track}」拿了 ${score} 分，鉴定为「${title}」。你敢来吗？`;
+  url.searchParams.set("result", currentType.code);
+  url.searchParams.set("score", String(score));
+  const text = `我的 Vibe Coding 类型是 ${currentType.code}「${currentType.name}」，${score} 分。你是哪一型？`;
   try {
-    if (navigator.share) {
-      await navigator.share({ title: "Vibe Coding 月考", text, url: url.href });
-      shareStatus.textContent = "战报已交给系统分享面板。";
-    } else {
-      await navigator.clipboard.writeText(`${text}\n${url.href}`);
-      shareStatus.textContent = "战报已复制，去群里制造一点同辈压力吧。";
+    const blob = await createResultImage();
+    const file = new File([blob], `vibe-${currentType.code.toLowerCase()}-${score}.png`, { type: "image/png" });
+    if (navigator.share && navigator.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({ title: "Vibe Coding 月考", text, url: url.href, files: [file] });
+        shareStatus.textContent = "结果图已交给系统分享。";
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+      }
     }
+
+    const imageUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = imageUrl;
+    link.download = file.name;
+    link.click();
+    window.setTimeout(() => URL.revokeObjectURL(imageUrl), 1000);
+    shareStatus.textContent = "结果图已保存。";
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") return;
-    shareStatus.textContent = "自动复制失败，请复制浏览器地址栏链接。";
+    shareStatus.textContent = "生成失败，请直接截图结果卡。";
   }
 }
 
@@ -412,7 +605,16 @@ $("#challenge-close").addEventListener("click", () => (challengeBanner.hidden = 
 
 scoreRing.style.strokeDasharray = String(circumference);
 scoreRing.style.strokeDashoffset = String(circumference);
-const challenge = new URLSearchParams(window.location.search).get("challenge");
+const initialParams = new URLSearchParams(window.location.search);
+const sharedResult = initialParams.get("result");
+const sharedScore = Number.parseInt(initialParams.get("score") ?? "", 10);
+if (sharedResult && vibeTypes[sharedResult] && Number.isFinite(sharedScore) && sharedScore >= 0 && sharedScore <= 100) {
+  const type = vibeTypes[sharedResult];
+  challengeCopy.textContent = `有人测出 ${type.code}「${type.name}」${sharedScore} 分。你是哪一型？`;
+  challengeBanner.hidden = false;
+}
+
+const challenge = initialParams.get("challenge");
 if (challenge) {
   const [trackId, rawScore] = challenge.split(":");
   const track = tracks.find((item) => item.id === trackId);

@@ -2,142 +2,33 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import QuizApp from "../components/QuizApp.astro";
 
-const title = "Vibe Coding 月考｜测测你的 AI 编程功力";
-const description = "每月一期，三套好玩但有用的 Vibe Coding 测试题。答完获得毒舌诊断、AI 董事会庆祝和可分享战报。";
+const title = "Vibe Coding 月考｜测出你的 Vibe 类型";
+const description = "9 道题，8 种结果，测出你的 Vibe Coding 类型。";
 ---
 
 <BaseLayout title={title} description={description}>
   <header class="site-header">
-    <a class="brand-link" href="/" aria-label="01MVP Vibe Coding 月考首页">
+    <a class="brand-link" href="/" aria-label="Vibe Coding 月考首页">
       <img src="/brand/01mvp-lockup-horizontal.svg" alt="01MVP" width="158" height="39" />
-      <span>/ VIBE EXAM</span>
+      <span>VIBE EXAM</span>
     </a>
-    <div class="header-meta">
-      <span>ISSUE 001</span>
-      <a href="https://github.com/01MVP/vibe" target="_blank" rel="noreferrer">SOURCE ↗</a>
-    </div>
+    <a class="header-link" href="https://github.com/01MVP/vibe" target="_blank" rel="noreferrer">GitHub ↗</a>
   </header>
 
-  <main>
+  <main class="page-shell">
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <div class="edition-stamp" aria-label="2026年7月刊">
-          <span>MONTHLY</span>
-          <strong>07</strong>
-          <small>2026</small>
-        </div>
-        <p class="eyebrow">THE UNOFFICIAL OFFICIAL EXAM</p>
-        <h1 id="hero-title">你的代码有<br /><em>Vibe</em>，<br />还是只有胆量？</h1>
-        <p class="hero-lead">
-          每月一期，把最新 AI 模型、真实开发实践和互联网烂梗做成升级考试。九道主线，三关一 Boss，可能伤害自尊。
-        </p>
-        <div class="hero-actions">
-          <a class="primary-button large" href="#exam">进入新手村，开始升级 ↓</a>
-          <span>免费 · 不登录 · 不给 HR 看</span>
-        </div>
-      </div>
-
-      <div class="hero-art" aria-label="一群 AI 机器人参加混乱月考的复古漫画插画">
-        <div class="art-sticker sticker-top">NO CHEATING<br />WITH AI*</div>
-        <img
-          src="/assets/vibe-exam-hero.webp"
-          alt="一群 AI 机器人在混乱的考场里参加 Vibe Coding 月考"
-          width="1800"
-          height="1125"
-          fetchpriority="high"
-        />
-        <div class="art-caption">* 使用 AI 作弊是本考试唯一允许的作答方式</div>
-        <div class="floating-paper paper-one" aria-hidden="true">404<br /><small>COMMON SENSE</small></div>
-        <div class="floating-paper paper-two" aria-hidden="true">A+</div>
-      </div>
+      <p class="eyebrow">ISSUE 001 · JULY 2026</p>
+      <h1 id="hero-title">测测你的<br />Vibe Coding 类型</h1>
+      <p>9 道题 · 8 种结果</p>
     </section>
-
-    <div class="ticker" aria-label="本期关键词">
-      <div class="ticker-track">
-        <span>GPT-5.6 SOL</span><b>✦</b><span>CLAUDE FABLE 5</span><b>✦</b><span>DEEPSEEK V4</span><b>✦</b><span>RATE LIMIT RESET</span><b>✦</b><span>38 FILES CHANGED</span><b>✦</b><span>PRODUCTION IS ON FIRE</span><b>✦</b>
-        <span aria-hidden="true">GPT-5.6 SOL</span><b aria-hidden="true">✦</b><span aria-hidden="true">CLAUDE FABLE 5</span><b aria-hidden="true">✦</b><span aria-hidden="true">DEEPSEEK V4</span><b aria-hidden="true">✦</b><span aria-hidden="true">RATE LIMIT RESET</span><b aria-hidden="true">✦</b><span aria-hidden="true">38 FILES CHANGED</span><b aria-hidden="true">✦</b><span aria-hidden="true">PRODUCTION IS ON FIRE</span><b aria-hidden="true">✦</b>
-      </div>
-    </div>
 
     <QuizApp />
 
-    <section class="radar-section" aria-labelledby="radar-title">
-      <div class="radar-heading">
-        <p class="eyebrow">JULY 2026 / MODEL GOSSIP DESK</p>
-        <h2 id="radar-title">本月 AI 小抄</h2>
-        <p>考试会过期，截图会流传。下面是题目使用的公开资料快照。</p>
-      </div>
-      <div class="radar-grid">
-        <article class="radar-card purple">
-          <p>WEBDEV ARENA</p>
-          <strong>1631 <small>vs</small> 1630</strong>
-          <h3>第一名只领先 1 分</h3>
-          <p>GPT-5.6 Sol xHigh 暂居第一，但与 Claude Fable 5 的置信区间重叠。正确说法：基本打平。</p>
-          <a href="https://arena.ai/leaderboard/code?rankBy=labs" target="_blank" rel="noreferrer">查看榜单 · 2026-07-13 ↗</a>
-        </article>
-        <article class="radar-card coral">
-          <p>CREATIVE WRITING</p>
-          <strong>#01</strong>
-          <h3>Claude Fable 5</h3>
-          <p>“哪个模型最强”通常是个坏问题。写作、编程、视觉、成本，需要分别回答。</p>
-          <a href="https://arena.ai/leaderboard/text?rankBy=labs" target="_blank" rel="noreferrer">查看榜单 · 2026-07-13 ↗</a>
-        </article>
-        <article class="radar-card acid">
-          <p>VISION GOTCHA</p>
-          <strong>TEXT<br />ONLY</strong>
-          <h3>DeepSeek V4 不直接看图</h3>
-          <p>编辑器表现得像能看截图，可能是另一个视觉模型先描述，再把文字递给它。</p>
-          <a href="https://api-docs.deepseek.com/quick_start/agent_integrations/github_copilot" target="_blank" rel="noreferrer">查看官方说明 · 2026-07-16 ↗</a>
-        </article>
-        <article class="radar-card black">
-          <p>CODEX HABITS</p>
-          <strong>/usage</strong>
-          <h3>别靠生物钟猜重置</h3>
-          <p>Codex CLI 的 /usage 会显示 daily、weekly、cumulative usage 以及 rate-limit reset。</p>
-          <a href="https://developers.openai.com/codex/cli/slash-commands" target="_blank" rel="noreferrer">查看官方文档 · 2026-07-16 ↗</a>
-        </article>
-      </div>
-    </section>
-
-    <section class="manifesto" aria-labelledby="manifesto-title">
-      <div class="manifesto-number">001</div>
-      <div>
-        <p class="eyebrow">WHY ANOTHER INTERNET TEST?</p>
-        <h2 id="manifesto-title">不是测你会不会背模型名，<br />是测你会不会让 AI <em>把事做完。</em></h2>
-      </div>
-      <div class="manifesto-copy">
-        <p>榜单会变，工具会换，但上下文、边界、验证、回滚这些东西不会突然失效。</p>
-        <p>所以每期一半追热点，一半考那些能让项目活过周五晚上的基本功。</p>
-      </div>
-    </section>
-
-    <section class="method-section" aria-labelledby="method-title">
-      <div>
-        <p class="eyebrow">BORING BUT IMPORTANT</p>
-        <h2 id="method-title">这份卷子有多认真？</h2>
-      </div>
-      <ol class="method-list">
-        <li><span>01</span><div><strong>热点题有日期</strong><p>模型与榜单题冻结来源和快照日期，下个月可能换答案。</p></div></li>
-        <li><span>02</span><div><strong>实践题看后果</strong><p>优先选择可验证、可回滚、能控制范围的动作。</p></div></li>
-        <li><span>03</span><div><strong>人格题不计分</strong><p>我们只想知道你的精神状态，不想毁掉你的成绩。</p></div></li>
-      </ol>
-      <aside class="disclaimer-note">
-        <strong>LEGAL-ISH NOTE</strong>
-        <p>这是娱乐型自测，不是招聘评估、职业资格或科学人格量表。插画为 AI 生成的戏仿场景，与图中可能联想到的人物和公司无关。</p>
-      </aside>
-    </section>
+    <p class="page-note">娱乐测试，不是职业资格。</p>
   </main>
 
   <footer class="site-footer">
-    <div>
-      <img src="/brand/01mvp-lockup-horizontal.svg" alt="01MVP" width="158" height="39" loading="lazy" />
-      <p>有趣的想法，先做出第一个版本。</p>
-    </div>
-    <div class="footer-links">
-      <a href="#exam">再考一次 ↑</a>
-      <a href="https://github.com/01MVP/vibe" target="_blank" rel="noreferrer">GitHub ↗</a>
-      <a href="https://01mvp.com" target="_blank" rel="noreferrer">01mvp.com ↗</a>
-    </div>
-    <p>ISSUE 001 · JULY 2026<br />MADE WITH QUESTIONABLE VIBES</p>
+    <span>01MVP · VIBE EXAM</span>
+    <a href="https://01mvp.com" target="_blank" rel="noreferrer">01mvp.com ↗</a>
   </footer>
 </BaseLayout>
