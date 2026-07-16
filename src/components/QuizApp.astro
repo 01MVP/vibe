@@ -1,74 +1,51 @@
-<section class="quiz-shell" id="exam" aria-labelledby="exam-title">
+---
+import type { TestDefinition } from "../data/tests";
+
+interface Props {
+  test: TestDefinition;
+}
+
+const { test } = Astro.props;
+---
+
+<section class="quiz-shell" id="quiz-app" data-test-id={test.id} aria-labelledby="exam-title">
   <div class="challenge-banner" id="challenge-banner" hidden>
     <span id="challenge-copy"></span>
     <button type="button" id="challenge-close" aria-label="关闭挑战提示">×</button>
   </div>
 
-  <div class="quiz-meta" aria-live="polite">
-    <div class="score-gauge" id="score-gauge">
-      <svg viewBox="0 0 140 140" aria-hidden="true">
-        <circle class="score-track" cx="70" cy="70" r="58"></circle>
-        <circle class="score-ring" id="score-ring" cx="70" cy="70" r="58"></circle>
-      </svg>
-      <div class="score-number"><strong id="score-value">--</strong><span>/100</span></div>
-    </div>
-    <div class="meta-copy">
-      <p class="score-label" id="score-label">等待开考</p>
-      <p id="reaction-text">9 道题，约 3 分钟。</p>
-    </div>
-    <dl class="score-stats">
-      <div><dt>答对</dt><dd id="correct-count">0</dd></div>
-      <div><dt>已答</dt><dd id="answered-count">0</dd></div>
-    </dl>
-    <div class="combo-box" id="combo-box"><span>COMBO</span><strong id="combo-count">×0</strong></div>
-    <div class="sound-toggle">
-      <span>音效</span>
-      <button type="button" id="sound-toggle" aria-pressed="true">ON</button>
-    </div>
-  </div>
-
-  <div id="track-picker" class="quiz-start">
-    <div class="start-art">
-      <img
-        src="/assets/vibe-exam-hero.webp"
-        alt="程序员和 AI 机器人参加一场混乱的编程考试"
-        width="1800"
-        height="1125"
-      />
+  <div id="start-view" class="quiz-start">
+    <div class="start-mark" aria-hidden="true">
+      <span>{test.index}</span>
+      <strong>{test.symbol}</strong>
     </div>
     <div class="start-copy">
-      <p class="micro-label">VIBE CODING 生存测试</p>
-      <h2 id="exam-title">你是哪种 Vibe 程序员？</h2>
-      <p>9 道题，8 种结果。</p>
-      <ol class="level-line" aria-label="测试关卡">
-        <li><span>01</span>会问</li>
-        <li><span>02</span>会验</li>
-        <li><span>03</span>会上线</li>
-      </ol>
-      <button class="primary-button" type="button" data-track="campaign">开始测试 →</button>
+      <p class="micro-label">{test.eyebrow}</p>
+      <h2 id="exam-title">{test.startTitle}</h2>
+      <p>{test.startCopy}</p>
+      <div class="start-meta">
+        <span>{test.duration}</span>
+        <span>{test.dimensions.map((dimension) => dimension.label).join(" / ")}</span>
+      </div>
+      <button class="primary-button" type="button" id="start-test">{test.cta}</button>
     </div>
   </div>
 
   <div id="question-view" class="question-view" hidden>
     <div class="question-toolbar">
-      <button class="text-button" type="button" id="back-to-tracks">← 退出</button>
-      <div class="question-mode">
-        <span id="active-level-name" hidden></span>
-        <span id="active-track-name"></span>
-      </div>
+      <button class="text-button" type="button" id="exit-test">← 退出</button>
+      <span id="answered-count">0 / {test.questions.length}</span>
     </div>
 
-    <div class="progress-wrap">
-      <div class="progress-meta">
-        <span id="question-position">QUESTION 01 / 09</span>
-        <span id="question-difficulty">初阶</span>
-      </div>
-      <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
-    </div>
+    <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
 
     <article class="question-card" id="question-card">
+      <div class="question-kicker">
+        <span id="question-position">01 / {String(test.questions.length).padStart(2, "0")}</span>
+        <span id="question-difficulty">热身</span>
+        <span id="question-category"></span>
+      </div>
       <p class="question-setup" id="question-setup"></p>
-      <p class="question-category" id="question-category"></p>
       <h2 id="question-prompt"></h2>
       <div class="option-list" id="option-list"></div>
     </article>
@@ -76,8 +53,9 @@
     <div class="answer-feedback" id="answer-feedback" hidden aria-live="polite">
       <div>
         <p class="feedback-verdict" id="feedback-verdict"></p>
-        <p id="feedback-explanation"></p>
-        <a id="feedback-source" target="_blank" rel="noreferrer" hidden></a>
+        <p class="feedback-explanation" id="feedback-explanation"></p>
+        <p class="feedback-takeaway" id="feedback-takeaway"></p>
+        <div class="feedback-sources" id="feedback-sources"></div>
       </div>
       <button class="primary-button" type="button" id="next-question">下一题 →</button>
     </div>
@@ -86,53 +64,42 @@
   <div id="result-view" class="result-view" hidden>
     <div class="result-card" id="result-card">
       <div class="result-card-head">
-        <p class="micro-label" id="result-mode-note">YOUR VIBE TYPE</p>
+        <p class="micro-label" id="result-mode-note">{test.shortTitle}</p>
         <p class="result-score"><span id="result-score">0</span><small>/100</small></p>
       </div>
+      <p class="result-tier" id="result-tier"></p>
       <div class="type-lockup">
-        <strong id="result-code">SHIP</strong>
-        <span id="result-icon" aria-hidden="true">🚢</span>
+        <strong id="result-code"></strong>
+        <span id="result-icon" aria-hidden="true"></span>
       </div>
       <h2 id="result-title"></h2>
       <p class="result-quote" id="result-quote"></p>
-      <div class="dimension-list">
-        <div><span>会问</span><i><b id="context-bar"></b></i><strong id="context-value">0/3</strong></div>
-        <div><span>会验</span><i><b id="evidence-bar"></b></i><strong id="evidence-value">0/3</strong></div>
-        <div><span>会上线</span><i><b id="safety-bar"></b></i><strong id="safety-value">0/3</strong></div>
+      <div class="dimension-list" id="dimension-list">
+        {test.dimensions.map((dimension, index) => (
+          <div>
+            <span>{dimension.label}</span>
+            <i><b data-dimension-bar={index}></b></i>
+            <strong data-dimension-value={index}>0</strong>
+          </div>
+        ))}
+      </div>
+      <div class="result-gaps-wrap">
+        <p>你的补课清单</p>
+        <ul id="result-gaps"></ul>
       </div>
       <p class="result-roast" id="result-roast"></p>
-      <small class="result-url">vibe.01mvp.com</small>
+      <small class="result-url">vibe.01mvp.com/{test.slug}</small>
     </div>
     <div class="result-actions">
       <button class="primary-button" type="button" id="share-result">保存结果图</button>
-      <button class="secondary-button" type="button" id="retry-track">再测一次</button>
-      <button class="text-button" type="button" id="change-track">返回</button>
+      <button class="secondary-button" type="button" id="retry-test">再测一次</button>
+      <a class="text-button" href="/">其他测试</a>
     </div>
     <p class="share-status" id="share-status" aria-live="polite"></p>
   </div>
 </section>
 
-<div class="celebration-layer" id="celebration-layer" aria-hidden="true">
-  <div class="celebration-card">
-    <img src="/assets/ai-board-celebration.webp" alt="" width="720" height="405" />
-    <p id="celebration-copy">AI 董事会批准了你的答案</p>
-  </div>
-</div>
 <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
-
-<div class="level-layer" id="level-layer" hidden>
-  <div class="level-card">
-    <p class="micro-label">LEVEL CLEARED</p>
-    <span id="cleared-level">LV.01</span>
-    <h2 id="cleared-title">Prompt 新手村</h2>
-    <p id="cleared-copy"></p>
-    <div class="level-unlock">
-      <small>NEXT</small>
-      <strong id="next-level-title">Agent 驯兽场</strong>
-    </div>
-    <button class="primary-button" type="button" id="enter-next-level">下一关 →</button>
-  </div>
-</div>
 
 <script>
   import "../scripts/quiz";

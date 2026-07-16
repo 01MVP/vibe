@@ -1,34 +1,49 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import QuizApp from "../components/QuizApp.astro";
+import { tests } from "../data/tests";
 
-const title = "Vibe Coding 月考｜测出你的 Vibe 类型";
-const description = "9 道题，8 种结果，测出你的 Vibe Coding 类型。";
+const title = "01MVP Vibe Lab｜测测你的 AI 用法";
+const description = "四套会补课的 AI 能力测试：Vibe 月考、Codex 熟练度、AI PPT 方案评级和 Viber 类型。";
+const [featured, ...otherTests] = tests;
 ---
 
 <BaseLayout title={title} description={description}>
-  <header class="site-header">
-    <a class="brand-link" href="/" aria-label="Vibe Coding 月考首页">
-      <img src="/brand/01mvp-lockup-horizontal.svg" alt="01MVP" width="158" height="39" />
-      <span>VIBE EXAM</span>
-    </a>
-    <a class="header-link" href="https://github.com/01MVP/vibe" target="_blank" rel="noreferrer">GitHub ↗</a>
-  </header>
-
-  <main class="page-shell">
-    <section class="hero" aria-labelledby="hero-title">
-      <p class="eyebrow">ISSUE 001 · JULY 2026</p>
-      <h1 id="hero-title">测测你的<br />Vibe Coding 类型</h1>
-      <p>9 道题 · 8 种结果</p>
+  <main>
+    <section class="home-hero" aria-labelledby="hero-title">
+      <div class="home-hero-copy">
+        <p class="eyebrow">01MVP / VIBE LAB</p>
+        <h1 id="hero-title">你的 AI 用法，<br />是夯，还是拉完了？</h1>
+        <p>答题，补课，生成一张值得发的结果图。</p>
+        <a class="primary-button" href={`/${featured.slug}`}>{featured.cta}</a>
+      </div>
+      <a class="featured-test" href={`/${featured.slug}`} aria-label={`进入${featured.shortTitle}`}>
+        <img src="/assets/vibe-exam-hero.webp" alt="人类与 AI 参加一场混乱又有趣的能力考试" width="1800" height="1125" />
+        <div>
+          <span>{featured.eyebrow}</span>
+          <strong>{featured.shortTitle}</strong>
+          <small>{featured.duration}</small>
+        </div>
+      </a>
     </section>
 
-    <QuizApp />
-
-    <p class="page-note">娱乐测试，不是职业资格。</p>
+    <section class="test-index" id="tests" aria-labelledby="tests-title">
+      <div class="section-heading">
+        <p class="eyebrow">MORE TESTS</p>
+        <h2 id="tests-title">想查哪块缺口？</h2>
+      </div>
+      <div class="test-list">
+        {otherTests.map((test) => (
+          <a class="test-row" href={`/${test.slug}`}>
+            <span class="test-number">{test.index}</span>
+            <span class="test-row-copy">
+              <strong>{test.shortTitle}</strong>
+              <small>{test.description}</small>
+            </span>
+            <span class="test-symbol" aria-hidden="true">{test.symbol}</span>
+            <span class="test-arrow" aria-hidden="true">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
   </main>
-
-  <footer class="site-footer">
-    <span>01MVP · VIBE EXAM</span>
-    <a href="https://01mvp.com" target="_blank" rel="noreferrer">01mvp.com ↗</a>
-  </footer>
 </BaseLayout>

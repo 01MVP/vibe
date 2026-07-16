@@ -1,0 +1,29 @@
+---
+import QuizApp from "../components/QuizApp.astro";
+import { tests, type TestDefinition } from "../data/tests";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+export function getStaticPaths() {
+  return tests.map((test) => ({ params: { slug: test.slug }, props: { test } }));
+}
+
+interface Props {
+  test: TestDefinition;
+}
+
+const { test } = Astro.props;
+const title = `${test.shortTitle}｜01MVP Vibe Lab`;
+---
+
+<BaseLayout title={title} description={test.description}>
+  <main class="page-shell">
+    <section class="test-hero" aria-labelledby="test-title">
+      <a class="back-link" href="/">← VIBE LAB</a>
+      <p class="eyebrow">{test.eyebrow}</p>
+      <h1 id="test-title">{test.title}</h1>
+      <p>{test.description}</p>
+    </section>
+    <QuizApp test={test} />
+    <p class="page-note">娱乐测试，不是职业资格。资料快照：2026 年 7 月。</p>
+  </main>
+</BaseLayout>

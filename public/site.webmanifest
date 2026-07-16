@@ -1,10 +1,10 @@
 {
-  "name": "Vibe Coding 月考",
-  "short_name": "Vibe 月考",
-  "description": "每月一期的 Vibe Coding 趣味测试。",
+  "name": "01MVP Vibe Lab",
+  "short_name": "Vibe Lab",
+  "description": "会补课、可分享的 AI 能力测试站。",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f4efe2",
-  "theme_color": "#f4efe2",
+  "background_color": "#f5f3ed",
+  "theme_color": "#f5f3ed",
   "icons": []
 }

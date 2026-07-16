@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@11.7.0",
-  "description": "每月一期的 Vibe Coding 趣味月考。",
+  "description": "会补课、可分享的 AI 能力测试站。",
   "scripts": {
     "dev": "astro dev",
     "check": "astro check",

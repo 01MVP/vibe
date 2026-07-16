@@ -12,11 +12,10 @@ const canonical = new URL(Astro.url.pathname, site).href;
 const ogImage = new URL("/og.webp", site).href;
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Quiz",
-  name: "Vibe Coding 月考",
+  "@type": Astro.url.pathname === "/" ? "WebSite" : "Quiz",
+  name: title,
   description,
   url: canonical,
-  educationalLevel: ["初阶", "中阶", "高阶"],
   inLanguage: "zh-CN",
   isAccessibleForFree: true,
   image: ogImage,
@@ -28,7 +27,7 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f4efe2" />
+    <meta name="theme-color" content="#f5f3ed" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -38,7 +37,7 @@ const jsonLd = {
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Vibe Coding 月考" />
+    <meta property="og:site_name" content="01MVP Vibe Lab" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -52,6 +51,20 @@ const jsonLd = {
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
+    <header class="site-header">
+      <a class="brand-link" href="/" aria-label="01MVP Vibe Lab 首页">
+        <img src="/brand/01mvp-lockup-horizontal.svg" alt="01MVP" width="158" height="39" />
+        <span>VIBE LAB</span>
+      </a>
+      <nav aria-label="主导航">
+        <a href="/#tests">全部测试</a>
+        <a href="https://github.com/01MVP/vibe" target="_blank" rel="noreferrer">GitHub ↗</a>
+      </nav>
+    </header>
     <slot />
+    <footer class="site-footer">
+      <span>01MVP · VIBE LAB</span>
+      <a href="https://01mvp.com" target="_blank" rel="noreferrer">01mvp.com ↗</a>
+    </footer>
   </body>
 </html>
