@@ -5,8 +5,8 @@ import { tracks } from "../data/questions";
 <section class="exam-section" id="exam" aria-labelledby="exam-title">
   <div class="section-kicker">
     <span>03 TEST PAPERS</span>
-    <span>18 QUESTIONS</span>
-    <span>01 FRAGILE EGO</span>
+    <span>21 QUESTIONS</span>
+    <span>03 LEVELS + 01 BOSS</span>
   </div>
 
   <div class="exam-window">
@@ -49,6 +49,11 @@ import { tracks } from "../data/questions";
           </div>
         </dl>
 
+        <div class="combo-box" id="combo-box">
+          <span>ANSWER COMBO</span>
+          <strong id="combo-count">×0</strong>
+        </div>
+
         <div class="reaction-box">
           <span aria-hidden="true">↳</span>
           <p id="reaction-text">请先选择一张试卷。我们承诺不会把成绩发给你老板。</p>
@@ -63,9 +68,32 @@ import { tracks } from "../data/questions";
       <div class="exam-stage">
         <div id="track-picker">
           <div class="stage-heading">
-            <p class="micro-label">PICK YOUR POISON</p>
-            <h2 id="exam-title">今天想被哪套题羞辱？</h2>
-            <p>每套 5 道计分题 + 1 道精神状态鉴定。可以全部试玩，找出最好玩的版本。</p>
+            <p class="micro-label">MAIN QUEST / RECOMMENDED</p>
+            <h2 id="exam-title">从 Vibe 新手，打到生产环境。</h2>
+            <p>默认走三关主线：先会问，再会验，最后学会让服务器活过周五。</p>
+          </div>
+
+          <article class="campaign-card">
+            <div class="campaign-intro">
+              <span class="campaign-stamp">NEW GAME</span>
+              <div>
+                <p>VIBE CODING 生存模式</p>
+                <h3>九题主线 · 三关一 Boss</h3>
+              </div>
+              <button class="primary-button large" type="button" data-track="campaign">从新手村出发 →</button>
+            </div>
+            <ol class="level-map" aria-label="主线关卡">
+              <li><span>LV.01</span><strong>Prompt 新手村</strong><small>会说人话</small></li>
+              <li><span>LV.02</span><strong>Agent 驯兽场</strong><small>会看证据</small></li>
+              <li><span>LV.03</span><strong>生产环境地狱</strong><small>会保住数据</small></li>
+              <li class="boss-level"><span>BOSS</span><strong>周五 23:58</strong><small>会拒绝老板</small></li>
+            </ol>
+          </article>
+
+          <div class="practice-divider">
+            <span>FREE PRACTICE</span>
+            <h3>不想走主线？直接选一张主题卷</h3>
+            <p>每套 5 道计分题 + 1 道精神状态鉴定。</p>
           </div>
 
           <div class="track-list">
@@ -87,7 +115,10 @@ import { tracks } from "../data/questions";
         <div id="question-view" hidden>
           <div class="question-toolbar">
             <button class="text-button" type="button" id="back-to-tracks">← 换一张卷</button>
-            <span id="active-track-name"></span>
+            <div class="question-mode">
+              <span id="active-level-name" hidden></span>
+              <span id="active-track-name"></span>
+            </div>
           </div>
           <div class="progress-wrap">
             <div class="progress-meta">
@@ -117,6 +148,7 @@ import { tracks } from "../data/questions";
         <div id="result-view" hidden>
           <div class="result-heading">
             <p class="micro-label">OFFICIAL-ISH RESULT</p>
+            <p class="result-mode-note" id="result-mode-note"></p>
             <p class="result-score"><span id="result-score">0</span><small>/100</small></p>
             <h2 id="result-title"></h2>
             <p class="result-roast" id="result-roast"></p>
@@ -152,6 +184,20 @@ import { tracks } from "../data/questions";
   </div>
 </div>
 <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+
+<div class="level-layer" id="level-layer" hidden>
+  <div class="level-card">
+    <p class="micro-label">LEVEL CLEARED</p>
+    <span id="cleared-level">LV.01</span>
+    <h2 id="cleared-title">Prompt 新手村</h2>
+    <p id="cleared-copy"></p>
+    <div class="level-unlock">
+      <small>NEXT AREA UNLOCKED</small>
+      <strong id="next-level-title">Agent 驯兽场</strong>
+    </div>
+    <button class="primary-button large" type="button" id="enter-next-level">进入下一关 →</button>
+  </div>
+</div>
 
 <script>
   import "../scripts/quiz";

@@ -15,6 +15,17 @@ pnpm dev
 pnpm build
 ```
 
+## 部署
+
+生产站点：`https://vibe.01mvp.com`
+
+```bash
+pnpm build
+npx wrangler@latest pages deploy dist --project-name vibe --branch main
+```
+
+站点使用 Cloudflare Pages；`main` 是生产分支。
+
 ## 内容结构
 
 - `src/data/questions.ts`：三套题库、答案、解析与来源快照

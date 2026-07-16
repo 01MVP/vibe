@@ -1,4 +1,5 @@
 export type TrackId = "hot" | "builder" | "production";
+export type QuestionTrack = TrackId | "campaign";
 
 export interface SourceLink {
   label: string;
@@ -14,7 +15,7 @@ export interface QuizOption {
 
 export interface QuizQuestion {
   id: string;
-  track: TrackId;
+  track: QuestionTrack;
   difficulty: "初阶" | "中阶" | "高阶" | "不计分";
   category: string;
   prompt: string;
@@ -66,6 +67,51 @@ export const tracks: TrackDefinition[] = [
 ];
 
 export const questions: QuizQuestion[] = [
+  {
+    id: "campaign-magic-words",
+    track: "campaign",
+    difficulty: "初阶",
+    category: "Prompt 黑话",
+    setup: "THE MAGIC WORDS",
+    prompt: "下面哪句需求，最容易让 AI 一本正经地自由发挥？",
+    options: [
+      { label: "做得高级一点，要有苹果感", correct: true, reaction: "需求没有边界，但审美压力已经拉满。" },
+      { label: "只改首页 CTA 文案，其他文件不要动", reaction: "范围很窄，Agent 没有借口翻修厨房。" },
+      { label: "完成后运行 pnpm build，并给出退出码", reaction: "这是可以验收的动作。" },
+      { label: "先检查现有设计规范，再给两个方案", reaction: "先取上下文，很像一个成年人。" },
+    ],
+    explanation: "‘高级’和‘苹果感’没有可验证定义。给范围、参考、约束和完成标准，才是在降低随机性。",
+  },
+  {
+    id: "campaign-four-agents",
+    track: "campaign",
+    difficulty: "中阶",
+    category: "多 Agent 物理学",
+    setup: "4 AGENTS / 1 FILE",
+    prompt: "你让四个 Agent 同时重构同一个核心文件，最可能解锁什么成就？",
+    options: [
+      { label: "四倍生产力", reaction: "如果工作边界重叠，四倍的通常不是生产力。" },
+      { label: "分布式 Merge Conflict", correct: true, reaction: "恭喜解锁：高并发互相覆盖。" },
+      { label: "自动形成技术委员会", reaction: "它们不会开会，只会同时保存。" },
+      { label: "代码通过民主投票变正确", reaction: "多数票无法修复类型错误。" },
+    ],
+    explanation: "多 Agent 适合边界独立、写入范围不冲突的任务。共享核心文件时，协调成本通常超过并行收益。",
+  },
+  {
+    id: "campaign-friday-boss",
+    track: "campaign",
+    difficulty: "高阶",
+    category: "最终 Boss",
+    setup: "FRIDAY / 23:58 / CEO ONLINE",
+    prompt: "老板说‘就改个按钮，直接上线吧’，Agent 顺手改了 27 个文件。你怎么打 Boss？",
+    options: [
+      { label: "先冻结范围、审查 diff、最小验证，并准备回滚", correct: true, reaction: "Boss 没死，但生产环境活过了周末。" },
+      { label: "27 是幸运数字，直接 push main", reaction: "GitHub Actions 正在播放片尾曲。" },
+      { label: "再叫三个 Agent 来复核并顺便重构", reaction: "最终 Boss 进入了第二形态。" },
+      { label: "只要按钮颜色对了，后端改动不重要", reaction: "权限系统在按钮背后安静地燃烧。" },
+    ],
+    explanation: "紧急发布更需要缩小范围：确认实际 diff、运行最小充分验证、确保回滚路径，再决定是否发布。",
+  },
   {
     id: "hot-code-gap",
     track: "hot",
@@ -378,4 +424,20 @@ export const questions: QuizQuestion[] = [
 
 export function questionsForTrack(track: TrackId): QuizQuestion[] {
   return questions.filter((question) => question.track === track);
+}
+
+const campaignOrder = [
+  "hot-code-gap",
+  "builder-before-code",
+  "campaign-magic-words",
+  "builder-big-diff",
+  "builder-stuck-loop",
+  "campaign-four-agents",
+  "prod-migration",
+  "prod-secret",
+  "campaign-friday-boss",
+];
+
+export function campaignQuestions(): QuizQuestion[] {
+  return campaignOrder.map((id) => questions.find((question) => question.id === id)).filter((question): question is QuizQuestion => Boolean(question));
 }
