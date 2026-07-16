@@ -24,6 +24,7 @@ export interface QuizQuestion {
   options: QuizOption[];
   explanation: string;
   takeaway: string;
+  commands?: string[];
   sources?: SourceLink[];
 }
 
@@ -70,43 +71,45 @@ export interface TestDefinition {
 
 const monthlyQuestions: QuizQuestion[] = [
   {
-    id: "monthly-app-store",
+    id: "monthly-executable-tools",
     dimension: "discover",
     difficulty: "热身",
-    category: "App 上架",
-    setup: "APP STORE / 47 FIELDS",
-    prompt: "又要发新版。App Store 那一堆文案、截图和审核信息，你准备怎么填？",
+    category: "工具升级",
+    setup: "SAME CLICKS / EVERY WEEK",
+    prompt: "一项工作每次都要开网页、复制内容、重复点按钮。最值得先升级哪一步？",
     options: [
-      { label: "打开网页，逐格填写，顺便祈祷别掉登录", points: 0, reaction: "古法手作，苹果网页是你的工位。" },
-      { label: "让 AI 写文案，我负责复制粘贴四十七次", points: 1, reaction: "AI 负责脑力，你负责人肉 API。" },
-      { label: "让浏览器 Agent 盲点，点错了再说", points: 1, reaction: "自动化了，但没有可复现性。" },
-      { label: "把 metadata 版本化，用 asc/API dry-run、校验再提交", points: 3, best: true, reaction: "上架信息终于也配拥有 Git 历史。" },
+      { label: "继续手动做，熟练以后自然会快", points: 0, reaction: "你把重复劳动练成了肌肉记忆。" },
+      { label: "让 AI 告诉我步骤，我照着点", points: 1, reaction: "AI 是顾问，你仍然是鼠标外设。" },
+      { label: "让浏览器 Agent 从头盲点到尾", points: 1, reaction: "手离开了鼠标，可复现性也离开了。" },
+      { label: "先找成熟 Skill，再接 CLI／MCP，让 Agent 执行并验收", points: 3, best: true, reaction: "建议终于升级成了可执行工作流。" },
     ],
-    explanation: "Apple 提供 App Store Connect API 管理审核提交；社区 asc CLI 可以把 metadata、截图、构建与提交串成可检查的流程。",
-    takeaway: "把上架资料当代码管理：版本化、dry-run、校验、再提交。",
+    explanation: "通用升级路线是：Skill 提供成熟流程，CLI／MCP 提供真实操作能力，Agent 负责执行和验证。比如 iOS 上架可用 asc Skills 串起构建、TestFlight、元数据和提交流程。",
+    takeaway: "重复操作先找成熟 Skill，再给 Agent 可执行工具；别长期做人肉中间件。",
+    commands: ["brew install asc", "npx skills add rorkai/app-store-connect-cli-skills"],
     sources: [
-      { label: "Apple Review Submissions API", url: "https://developer.apple.com/documentation/appstoreconnectapi/review-submissions", snapshot: "2026-07" },
-      { label: "asc CLI", url: "https://github.com/rorkai/App-Store-Connect-CLI", snapshot: "2026-07" },
+      { label: "OpenAI：Build Skills", url: "https://learn.chatgpt.com/docs/build-skills", snapshot: "2026-07" },
+      { label: "ASC CLI Skills", url: "https://github.com/rorkai/app-store-connect-cli-skills", snapshot: "2026-07" },
     ],
   },
   {
-    id: "monthly-xcode-agent",
+    id: "monthly-automation-boundary",
     dimension: "discover",
-    difficulty: "热身",
-    category: "iOS 调试",
-    setup: "BUILD FAILED / COPY LOG?",
-    prompt: "iOS App 报错，AI 又让你手动复制日志。2026 年更顺手的做法是？",
+    difficulty: "进阶",
+    category: "自动化边界",
+    setup: "AUTOMATE EVERYTHING?",
+    prompt: "Agent 已经能操作真实工具。怎样才算一条靠谱的自动化流程？",
     options: [
-      { label: "复制最后一行红字，前面的都不重要", points: 0, reaction: "你成功删除了 90% 的上下文。" },
-      { label: "截图发给纯文本模型，问它看见没有", points: 0, reaction: "一场关于视力的信任实验。" },
-      { label: "只让它改代码，构建和模拟器我来点", points: 1, reaction: "你仍然是这条流水线上的传送带。" },
-      { label: "接入 Xcode Tools，让 Agent 自己构建、测试和读诊断", points: 3, best: true, reaction: "报错终于可以直接找 AI，不必经过你翻译。" },
+      { label: "权限全部放开，最终发布也不用确认", points: 0, reaction: "自动化获得自由，你获得事故报告。" },
+      { label: "命令退出码是 0，就算完成", points: 1, reaction: "机器说成功，用户暂未被询问。" },
+      { label: "Agent 负责执行，最后我从头手动重做一遍", points: 1, reaction: "自动化成功节省了零分钟。" },
+      { label: "最小权限执行，先预检，再验证；不可逆动作单独确认", points: 3, best: true, reaction: "Agent 真干活，安全带也没有拆。" },
     ],
-    explanation: "Apple 已支持外部 Agent 通过 xcrun mcpbridge 使用 Xcode 能力；需要操作模拟器 UI 时，还可以补充模拟器 MCP。",
-    takeaway: "先给 Agent 结构化的 Xcode 能力；需要视觉交互时再加模拟器工具。",
+    explanation: "Skill 本身是流程说明，不等于系统权限。以 iOS 为例，Xcode 工具可让 Agent 构建、测试和读取诊断，asc Skills 可编排上架流程；但新建 App 记录会转用浏览器自动化，首发隐私等事项也可能仍有人工阻塞项。",
+    takeaway: "自动化不等于无人看管：执行交给 Agent，预检、验收和最终授权必须分开。",
     sources: [
-      { label: "Apple：Giving external agents access to Xcode", url: "https://developer.apple.com/documentation/xcode/giving-external-agents-access-to-xcode", snapshot: "2026-07" },
-      { label: "iOS Simulator MCP", url: "https://github.com/whitesmith/ios-simulator-mcp", snapshot: "2026-07" },
+      { label: "OpenAI：Codex Best Practices", url: "https://learn.chatgpt.com/guides/best-practices", snapshot: "2026-07" },
+      { label: "Apple：External Agents in Xcode", url: "https://developer.apple.com/documentation/xcode/giving-external-agents-access-to-xcode", snapshot: "2026-07" },
+      { label: "ASC Release Flow", url: "https://github.com/rorkai/app-store-connect-cli-skills", snapshot: "2026-07" },
     ],
   },
   {
@@ -734,7 +737,7 @@ export const tests: TestDefinition[] = [
     kind: "knowledge",
     shortTitle: "7 月 Vibe 月考",
     title: "测测你还在用多少古法操作",
-    description: "9 道新知题。答完带走 App 上架、Xcode Agent、AI PPT、Skills 和自动巡检的新用法。",
+    description: "9 道新知题。答完带走工具链自动化、页面验收、AI PPT、Skills、并行工作和自动巡检的新用法。",
     eyebrow: "ISSUE 001 · JULY 2026",
     symbol: "⚡",
     duration: "9 题 · 约 4 分钟",

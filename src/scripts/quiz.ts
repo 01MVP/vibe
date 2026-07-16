@@ -45,6 +45,7 @@ function bootQuiz(root: HTMLElement, test: TestDefinition) {
   const feedbackVerdict = find("#feedback-verdict");
   const feedbackExplanation = find("#feedback-explanation");
   const feedbackTakeaway = find("#feedback-takeaway");
+  const feedbackCommand = find("#feedback-command");
   const feedbackSources = find("#feedback-sources");
   const nextQuestion = find<HTMLButtonElement>("#next-question");
   const resultCard = find("#result-card");
@@ -146,6 +147,9 @@ function bootQuiz(root: HTMLElement, test: TestDefinition) {
 
     feedbackExplanation.textContent = question.explanation;
     feedbackTakeaway.textContent = `带走：${question.takeaway}`;
+    feedbackCommand.hidden = !question.commands?.length;
+    const commandCode = feedbackCommand.querySelector("code");
+    if (commandCode) commandCode.textContent = question.commands?.join("\n") ?? "";
     feedbackSources.replaceChildren();
     question.sources?.forEach((source) => {
       const link = document.createElement("a");
