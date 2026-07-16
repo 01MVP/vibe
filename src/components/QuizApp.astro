@@ -1,0 +1,158 @@
+---
+import { tracks } from "../data/questions";
+---
+
+<section class="exam-section" id="exam" aria-labelledby="exam-title">
+  <div class="section-kicker">
+    <span>03 TEST PAPERS</span>
+    <span>18 QUESTIONS</span>
+    <span>01 FRAGILE EGO</span>
+  </div>
+
+  <div class="exam-window">
+    <div class="window-bar">
+      <div class="traffic-lights" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+      <p>vibe-exam.exe</p>
+      <span class="window-status">ONLINE / UNPROCTORED</span>
+    </div>
+
+    <div class="challenge-banner" id="challenge-banner" hidden>
+      <span id="challenge-copy"></span>
+      <button type="button" id="challenge-close" aria-label="关闭挑战提示">×</button>
+    </div>
+
+    <div class="exam-grid">
+      <aside class="score-panel" aria-live="polite">
+        <p class="micro-label">LIVE VIBE METER</p>
+        <div class="score-gauge" id="score-gauge">
+          <svg viewBox="0 0 140 140" aria-hidden="true">
+            <circle class="score-track" cx="70" cy="70" r="58"></circle>
+            <circle class="score-ring" id="score-ring" cx="70" cy="70" r="58"></circle>
+          </svg>
+          <div class="score-number">
+            <strong id="score-value">--</strong>
+            <span>/ 100</span>
+          </div>
+        </div>
+        <p class="score-label" id="score-label">等待开考</p>
+
+        <dl class="score-stats">
+          <div>
+            <dt>答对</dt>
+            <dd id="correct-count">0</dd>
+          </div>
+          <div>
+            <dt>已答</dt>
+            <dd id="answered-count">0</dd>
+          </div>
+        </dl>
+
+        <div class="reaction-box">
+          <span aria-hidden="true">↳</span>
+          <p id="reaction-text">请先选择一张试卷。我们承诺不会把成绩发给你老板。</p>
+        </div>
+
+        <div class="sound-toggle">
+          <span>廉价音效</span>
+          <button type="button" id="sound-toggle" aria-pressed="true">ON</button>
+        </div>
+      </aside>
+
+      <div class="exam-stage">
+        <div id="track-picker">
+          <div class="stage-heading">
+            <p class="micro-label">PICK YOUR POISON</p>
+            <h2 id="exam-title">今天想被哪套题羞辱？</h2>
+            <p>每套 5 道计分题 + 1 道精神状态鉴定。可以全部试玩，找出最好玩的版本。</p>
+          </div>
+
+          <div class="track-list">
+            {
+              tracks.map((track) => (
+                <button class={`track-card track-${track.id}`} type="button" data-track={track.id}>
+                  <span class="track-index">PAPER {track.index}</span>
+                  <span class="track-title">{track.title}</span>
+                  <span class="track-subtitle">{track.subtitle}</span>
+                  <span class="track-description">{track.description}</span>
+                  <span class="track-audience">适合：{track.audience}</span>
+                  <span class="track-cta">开始受刑 <b aria-hidden="true">→</b></span>
+                </button>
+              ))
+            }
+          </div>
+        </div>
+
+        <div id="question-view" hidden>
+          <div class="question-toolbar">
+            <button class="text-button" type="button" id="back-to-tracks">← 换一张卷</button>
+            <span id="active-track-name"></span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-meta">
+              <span id="question-position">QUESTION 01 / 06</span>
+              <span id="question-difficulty">初阶</span>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
+          </div>
+
+          <article class="question-card" id="question-card">
+            <p class="question-setup" id="question-setup"></p>
+            <p class="question-category" id="question-category"></p>
+            <h2 id="question-prompt"></h2>
+            <div class="option-list" id="option-list"></div>
+          </article>
+
+          <div class="answer-feedback" id="answer-feedback" hidden aria-live="polite">
+            <div>
+              <p class="feedback-verdict" id="feedback-verdict"></p>
+              <p id="feedback-explanation"></p>
+              <a id="feedback-source" target="_blank" rel="noreferrer" hidden></a>
+            </div>
+            <button class="primary-button" type="button" id="next-question">下一题 →</button>
+          </div>
+        </div>
+
+        <div id="result-view" hidden>
+          <div class="result-heading">
+            <p class="micro-label">OFFICIAL-ISH RESULT</p>
+            <p class="result-score"><span id="result-score">0</span><small>/100</small></p>
+            <h2 id="result-title"></h2>
+            <p class="result-roast" id="result-roast"></p>
+          </div>
+
+          <figure class="result-image-wrap">
+            <img
+              src="/assets/ai-board-celebration.webp"
+              alt="一群虚构 AI 公司老板围着奖牌夸张庆祝的复古漫画"
+              width="1600"
+              height="900"
+              loading="lazy"
+            />
+            <figcaption>AI 董事会一致通过：这份成绩值得浪费一些彩纸。</figcaption>
+          </figure>
+
+          <div class="result-actions">
+            <button class="primary-button" type="button" id="share-result">复制战报</button>
+            <button class="secondary-button" type="button" id="retry-track">再考一次</button>
+            <button class="text-button" type="button" id="change-track">换一张卷</button>
+          </div>
+          <p class="share-status" id="share-status" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="celebration-layer" id="celebration-layer" aria-hidden="true">
+  <div class="celebration-card">
+    <img src="/assets/ai-board-celebration.webp" alt="" width="720" height="405" />
+    <p id="celebration-copy">AI 董事会批准了你的答案</p>
+  </div>
+</div>
+<div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+
+<script>
+  import "../scripts/quiz";
+</script>

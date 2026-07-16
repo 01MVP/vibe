@@ -1,0 +1,10 @@
+{
+  "name": "Vibe Coding 月考",
+  "short_name": "Vibe 月考",
+  "description": "每月一期的 Vibe Coding 趣味测试。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4efe2",
+  "theme_color": "#f4efe2",
+  "icons": []
+}

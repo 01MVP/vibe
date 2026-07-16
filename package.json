@@ -1,0 +1,23 @@
+{
+  "name": "vibe-coding-exam",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.7.0",
+  "description": "每月一期的 Vibe Coding 趣味月考。",
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro check",
+    "build": "astro check && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.0.5",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.3"
+  }
+}
