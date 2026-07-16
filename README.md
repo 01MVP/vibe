@@ -43,7 +43,7 @@ npx wrangler@latest pages deploy dist --project-name vibe --branch main
 ## 内容结构
 
 - `src/data/tests.ts`：四套测试、结果等级、解析与来源快照
-- `src/scripts/quiz.ts`：答题、评分、类型判定、补课清单与结果图逻辑
+- `src/scripts/quiz-runtime.ts`：答题、评分、类型判定、补课清单与结果图逻辑
 - `src/styles/global.css`：页面视觉与响应式样式
 - `public/assets/`：页面使用的生成式插画
 
