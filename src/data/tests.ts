@@ -611,6 +611,22 @@ const iosQuestions: QuizQuestion[] = [
     explanation: "App Store 隐私标签、App Tracking Transparency、HealthKit 权限都需要准确声明。Agent 可以帮你列场景，但最终最小化 + 准确描述必须由人把关。",
     takeaway: "隐私不是功能，是上架的硬门槛。越小越安全。",
   },
+  {
+    id: "ios-agents-md",
+    dimension: "workflow",
+    difficulty: "进阶",
+    category: "规则固化",
+    setup: "第三次犯同一个架构错",
+    prompt: "Agent 第三次把 SwiftUI 状态放错地方。你怎么根治？",
+    options: [
+      { label: "下次再骂它一次", points: 0, reaction: "情绪管理又升级了。" },
+      { label: "每次都重新解释一遍架构", points: 1, reaction: "你成了昂贵的上下文。" },
+      { label: "写进项目 .cursor/rules 或 AGENTS.md，配 lint 兜底", points: 3, best: true, reaction: "规则终于跟着仓库走。" },
+      { label: "换一个更聪明的模型", points: 1, reaction: "模型换了，问题还在。" },
+    ],
+    explanation: "iOS 架构规则（状态管理、依赖注入、响应式）适合写进 AGENTS.md + SwiftLint / 自定义检查。MCP 让 Agent 自己跑检查。",
+    takeaway: "重复的架构错误，值得固化成仓库级规则 + 自动检查。",
+  },
 ];
 
 const webQuestions: QuizQuestion[] = [
@@ -700,6 +716,38 @@ const webQuestions: QuizQuestion[] = [
     explanation: "现代 AI 浏览器工具可以跑真实性能分析（Lighthouse、Network、Core Web Vitals）。让 Agent 自己诊断、修复、再验证，比你猜快得多。",
     takeaway: "性能问题必须在真实浏览器里被测量，而不是被猜测。",
     sources: [{ label: "Web Perf 实践 2026", url: "https://web.dev/", snapshot: "2026-07" }],
+  },
+  {
+    id: "web-accessibility",
+    dimension: "qa",
+    difficulty: "进阶",
+    category: "无障碍",
+    setup: "颜色对比低",
+    prompt: "AI 生成的按钮文字在浅背景上几乎看不清。你怎么处理？",
+    options: [
+      { label: "用户会放大字体吧", points: 0, reaction: "无障碍用户表示感谢。" },
+      { label: "让 Agent 调深一点颜色", points: 1, reaction: "下次生成又会忘。" },
+      { label: "先定 WCAG AA 标准，写进设计系统和 Skill", points: 3, best: true, reaction: "你把可访问性变成了默认约束。" },
+      { label: "上线后再修", points: 0, reaction: "修复成本永远比预防高。" },
+    ],
+    explanation: "v0/Cursor 等支持把对比度、无障碍检查作为规则。把 WCAG 要求和品牌色板喂给 Skill，后续生成自动遵守。",
+    takeaway: "无障碍不是事后修，是生成前的硬约束。",
+  },
+  {
+    id: "web-ownership",
+    dimension: "workflow",
+    difficulty: "高阶",
+    category: "长期拥有",
+    setup: "想卖掉或交接",
+    prompt: "网站越做越大，你想让别人能接手。你提前做了什么？",
+    options: [
+      { label: "什么都没做，代码就是文档", points: 0, reaction: "接盘侠正在沉默。" },
+      { label: "README 里写一句「用 AI 做的」", points: 1, reaction: "信息量为零。" },
+      { label: "写清晰 README + AGENTS.md + 组件文档 + 部署脚本", points: 3, best: true, reaction: "你把「只有我懂」变成了「任何人能接」。" },
+      { label: "等要交接时再整理", points: 0, reaction: "经典的「以后再说」。"},
+    ],
+    explanation: "可维护项目需要 AGENTS.md（规则）、设计系统文档、环境说明、部署脚本。AI 帮你生成，但人要确保它可交接。",
+    takeaway: "想长期拥有或交接，就提前把规则和文档变成资产。",
   },
 ];
 
