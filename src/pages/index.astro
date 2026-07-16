@@ -2,8 +2,8 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { tests } from "../data/tests";
 
-const title = "01MVP Vibe Lab｜测测你的 AI 用法";
-const description = "四套会补课的 AI 能力测试：Vibe 月考、Codex 熟练度、AI PPT 方案评级和 Viber 类型。";
+const title = "01MVP Vibe Lab｜AI 时代的趣味能力月考";
+const description = "本月综合 AI 月考 + 专题测试：视频、PPT、iOS、网站、Codex、Viber 类型。答完拿结果、找缺口、带走真技巧。";
 const [featured, ...otherTests] = tests;
 ---
 
@@ -12,23 +12,24 @@ const [featured, ...otherTests] = tests;
     <section class="home-hero" aria-labelledby="hero-title">
       <div class="home-hero-copy">
         <p class="eyebrow">01MVP / VIBE LAB</p>
-        <h1 id="hero-title">你的 AI 用法，<br />是夯，还是拉完了？</h1>
-        <p>答题，补课，生成一张值得发的结果图。</p>
+        <h1 id="hero-title">本月 AI 月考<br />你还在用古法吗？</h1>
+        <p>所有人都在考。答完带走结果 + 缺口 + 真技巧。</p>
         <a class="primary-button" href={`/${featured.slug}`}>{featured.cta}</a>
       </div>
       <a class="featured-test" href={`/${featured.slug}`} aria-label={`进入${featured.shortTitle}`}>
-        <img src="/assets/vibe-exam-hero.webp" alt="人类与 AI 参加一场混乱又有趣的能力考试" width="1800" height="1125" />
+        <img src="/assets/vibe-exam-hero.webp" alt="2026 AI 趣味能力月考现场：老师、设计师、视频创作者、独立开发者、普通用户和捣蛋 AI 一起考试" width="1800" height="1012" />
         <div>
           <span>{featured.eyebrow}</span>
           <strong>{featured.shortTitle}</strong>
           <small>{featured.duration}</small>
+          <div class="brand-strip" aria-hidden="true">混战选手：OpenAI · Claude · Cursor · Kling · 豆包 · Qwen · Grok · Veo</div>
         </div>
       </a>
     </section>
 
     <section class="test-index" id="tests" aria-labelledby="tests-title">
       <div class="section-heading">
-        <p class="eyebrow">MORE TESTS</p>
+        <p class="eyebrow">专题月考</p>
         <h2 id="tests-title">想查哪块缺口？</h2>
       </div>
       <div class="test-list">

@@ -76,6 +76,11 @@ img { display: block; max-width: 100%; }
 .featured-test span { grid-column: 1 / -1; color: #f3a083; }
 .featured-test strong { font-size: 19px; }
 .featured-test small { align-self: end; color: #bbb; }
+.brand-strip {
+  margin-top: 8px;
+  font: 700 9px/1 var(--mono); letter-spacing: .04em; color: #aaa;
+  text-align: left; pointer-events: none; opacity: .75;
+}
 
 .test-index { width: min(920px, calc(100% - 48px)); margin: 0 auto; padding: 110px 0 140px; scroll-margin-top: 30px; }
 .section-heading { display: grid; grid-template-columns: 140px 1fr; align-items: end; margin-bottom: 28px; }
